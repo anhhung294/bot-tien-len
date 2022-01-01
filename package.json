@@ -1,0 +1,19 @@
+{
+  "name": "bot-tien-len",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anhhung294/bot-tien-len.git"
+  },
+  "author": "Anh Hung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anhhung294/bot-tien-len/issues"
+  },
+  "homepage": "https://github.com/anhhung294/bot-tien-len#readme"
+}
