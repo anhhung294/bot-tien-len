@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/anhhung294/bot-tien-len/issues"
   },
-  "homepage": "https://github.com/anhhung294/bot-tien-len#readme"
+  "homepage": "https://github.com/anhhung294/bot-tien-len#readme",
+  "dependencies": {
+    "discord.js": "^13.5.0",
+    "dotenv": "^10.0.0",
+    "sql": "^0.78.0"
+  }
 }
