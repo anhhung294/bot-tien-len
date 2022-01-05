@@ -3,43 +3,45 @@ const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 require('dotenv').config();
-const fs = require('fs');
-const startGame = require('./services/start-game.js');
+const startGame = require('./services/game.js').startGame;
 const checkChannel = require('./services/check-channel.js');
-const endGame = require('./services/end-game.js');
+const endGame = require('./services/game.js').endGame;
 const token = process.env.TOKEN;
 const hostID = process.env.HOST_ID;
-const firstChannelId = process.env.firstChannelId;
-const secondChannelId = process.env.secondChannelId;
-const thirdChannelId = process.env.thirdChannelId;
-const fourthChannelId = process.env.fourthChannelId;
+var isGameStarted = false;
+
+const board = new Map();
+channelsID = [process.env.firstChannelId, process.env.secondChannelId, process.env.secondChannelId, process.env.fourthChannelId];
+for(let i =0; i< channelsID.length; i++) {
+    board.set(channelsID[i], require(`./channelExecute/channel-${i+1}.js`));
+}
 
 client.on('messageCreate', msg =>{
-    if(!checkChannel(msg.channel.id)) return;
-    let channel = msg.channel;
-    if(checkChannel(msg.channel.id)){
-        switch(msg.content){
-            case 'start': {
-                startGame(client, channel);
-                break;
+   if(!checkChannel(msg.channel.id)) return;
+   switch(msg.channel.id){
+       case hostID:{
+            switch(msg.content){
+                case 'start': {
+                    startGame(client, msg.channel);
+                    isGameStarted=true;
+                    break;
+                }case 'end':{
+                    isGameStarted = false;
+                    msg.channel.send('Game over!')
+                    break;
+                }default: {
+                    if(!msg.author.bot) return msg.channel.send('Bạn đã nhập sai cú pháp!');
+                    else if(isGameStarted&&!msg.author.bot) return msg.channel.send('Ván trước chưa kết thúc!');
+                    break;
+                }
             }
-            case 'end': {
-                endGame();
-                break;
-            }
-            default: {
-               return;
-            }
-        }
-    }else if(firstChannelId === channel.id){
-        channelOneExecute(client, msg);
-    }else if(secondChannelId === channel.id){
-        channelTwoExecute(client, msg);
-    }else if(thirdChannelId === channel.id){
-        channelThreeExecute(client, msg);
-    }else if(fourthChannelId === channel.id){
-        channelFourExecute(client, msg);
-    }
+            break;
+       }default:{
+           if(!board.get(msg.channel.id)) return;
+           board.get(msg.channel.id).channelExecute(client, msg.channel);
+           break;
+       }
+    } 
 });
 
 
@@ -47,7 +49,7 @@ client.on('messageCreate', msg =>{
 
 
 client.on('ready', () => {
-    console.log(`${client.user.username} is already`);
+    console.log(`${client.user.tag} is already`);
 });
 
 client.login(token);
