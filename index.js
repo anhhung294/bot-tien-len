@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_BANS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const fs = require('fs');
 
 require('dotenv').config();
@@ -31,8 +31,8 @@ client.on('messageCreate', msg =>{
     if(msg.author.bot || !msg.content.startsWith(PREFIX))return;
     if(!channelsId.includes(channelSendID)) return;
     channelsId.shift();
-    if(hostID===channelSendID&&hostCommands.has(command)) return hostCommands.get(command).execute(client, msg, channelsId);
-    else if(channelsId.includes(channelSendID)&&channelCommands.has(command)) return channelCommands.get(command).execute(client, msg, client.channels.cache.get(hostID));
+    if(hostID===channelSendID&&hostCommands.has(command)) hostCommands.get(command).execute(client, msg, channelsId);
+    else if(channelsId.includes(channelSendID)&&channelCommands.has(command)) channelCommands.get(command).execute(client, msg, client.channels.cache.get(hostID));
 });
 
 

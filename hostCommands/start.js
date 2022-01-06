@@ -18,9 +18,13 @@ module.exports={
         const hostChannel = msg.channel;
         const comCards = shuffledCards(cards);
 
-        if(await DB.get('isGameStarted')==='true') msg.channel.send('Vui lòng kết thúc ván trước');
+        if(await DB.get('isGameStarted')[0]==='true'){
+            return msg.channel.send('Vui lòng kết thúc ván trước');
+        }
         
-        if(msg.mentions.users.size > 4||msg.mentions.users.size <=1) hostChannel.send('Số người chơi không đúng! (2-4 người) \n Vui lòng bắt đầu lại!');
+        if(msg.mentions.users.size > 4||msg.mentions.users.size <=1){
+            return hostChannel.send('Số người chơi không đúng! (2-4 người) \n Vui lòng bắt đầu lại!');
+        }
         else{
             msg.channel.send("Vui lòng chờ một chút!");
             [...playersID] = msg.mentions.users.keys();
@@ -45,7 +49,7 @@ module.exports={
                 await DB.update(`card_${i}`, comCards[i-1]);
             }
 
-            msg.channel.send('Trò chơi bắt đầu!');
+            return msg.channel.send('Trò chơi bắt đầu!'); 
         }
     }
 };

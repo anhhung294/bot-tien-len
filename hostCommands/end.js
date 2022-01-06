@@ -1,13 +1,19 @@
 //jshint esversion: 8
 const DB = require('../interactWithDB.js');
+require('dotenv').config();
+const GUILD_ID = process.env.GUILD_ID;
 
 module.exports ={
     name: 'end',
     execute: async function(client, msg, channelsId){
+        if(await DB.get('isGameStarted')[0] === 'true'){
+            return msg.channel.send('Chưa bắt đầu trò chơi!');
+        }
+
         msg.reply('Vui lòng chờ 30s trước khi bắt đầu ván mới!');
             
-        const guild = client.guilds.cache.get(789138759173144586);
-        const playersID = await DB.get('playersID');
+        const guild = client.guilds.cache.get(GUILD_ID);
+        const playersID = await DB.get('playersID')[0];
         
         await DB.update('isGameStarted', 'false');
         
@@ -29,6 +35,6 @@ module.exports ={
             }
         }
 
-        msg. channel.send("Có thể bắt đầu ván mới ngay lúc này!");
+        return msg.channel.send("Có thể bắt đầu ván mới ngay lúc này!");
     }
 };

@@ -4,7 +4,7 @@ require('dotenv').config();
 const env = process.env;
 const urlDB = env.urlDB; 
 
-mongoose.connect(urlDB).then(()=> console.log('Connected to database!'));
+mongoose.connect(urlDB).then(()=> console.log('Connected to database!')).catch(err => console.log(err));
 
 const boardComponentsSchema = new mongoose.Schema({
     name: String,
@@ -18,7 +18,7 @@ const saveData = async function(name, data){
         name: name,
         data: data
     }); 
-    await component.save();
+    return component.save();
 };
 
 const getData = async function(name){
@@ -36,8 +36,7 @@ const updateData = async function(nameOfData, update){
     let updateData = {
         data : update
     };
-    let newBoardComponent = await boardComponent.findOneAndUpdate(filter, updateData);
-    return newBoardComponent;
+    return boardComponent.findOneAndUpdate(filter, updateData);
 };
 
 module.exports.save = saveData;
