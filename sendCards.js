@@ -1,12 +1,12 @@
 // jshint esversion: 8
 const { MessageEmbed } = require('discord.js');
 
-module.exports =async function(client,cards ,channelId){
+module.exports = function(client,cards ,channelId, title){
     let channel = client.channels.cache.get(channelId);
     
     const exampleEmbed = new MessageEmbed()
 	.setColor('#0099ff')
-	.setTitle('Bài của bạn: ');
+	.setTitle(title);
     
     for(let i=0; i< cards.length; i++){
         let name = cards[i].split('-').join('');

@@ -16,45 +16,36 @@ module.exports={
     execute : async function(client, msg, channelsId){
         var playersID = [];
         const hostChannel = msg.channel;
-
-        await new Promise(function(resolve, reject) {
-            resolve(hostChannel.send('Vui lòng tag tên các người chơi!'));
-        });
-         
         const comCards = shuffledCards(cards);
 
-        for(let i = 1; i <= 4 ;i++){
-            sendCards(client, comCards[i-1], channelsId[i-1]);
-            
-            let channel = client.channels.cache.get(channelsId[i-1]);
-            channel.send('- Dùng lệnh sapxep [thứ tự mới của bộ bài] để sắp xếp bài \n Ví du: Ban đầu thứ tự là: 1 2 3 4 5 \n Bạn muốn sắp xếp thành: 3 2 4 1 5 thì nhập: \n sapxep 3 2 4 1 5');
-            channel.send('- Dùng lệnh danhbai [các lá bài muốn đánh] để đánh bài \n Ví du: Bạn có các lá: 1 2 3 4 5 \n Bạn muốn đánh: 3 2 thì nhập: \n danhbai 3 2');
-            if(!DB.get(`card_${i}`)){
-                DB.save(`card_${i}`, comCards[i-1]);
-            }else{
-                DB.update(`card_${i}`, comCards[i-1]);
-            }
-        }
+        if(await DB.get('isGameStarted')==='true') msg.channel.send('Vui lòng kết thúc ván trước');
+        
+        if(msg.mentions.users.size > 4||msg.mentions.users.size <=1) hostChannel.send('Số người chơi không đúng! (2-4 người) \n Vui lòng bắt đầu lại!');
+        else{
+            msg.channel.send("Vui lòng chờ một chút!");
+            [...playersID] = msg.mentions.users.keys();
 
-        client.once('messageCreate',async message => {
-            let channelSendID = message.channelId;
-            if(message.author.bot || !channelsId.includes(channelSendID)) return;
-            if(message.mentions.users.size > 4) return hostChannel.send('Số người chơi quá mức cho phép! (2-4 người) \n Vui lòng bắt đầu lại!');
-            else{
-                [...playersID] = await new Promise((resolve, reject) => {
-                    resolve(message.mentions.users.keys());
-                });
-                if(!DB.get('playersID')){
-                    DB.save('playersID', playersID);
-                }else{
-                    DB.update('playersID', playersID);
-                }
-                for(let i =0; i< playersID.length;i++){
-                    let member = message.mentions.members.get(playersID[i]);
-                    let role = message.guild.roles.cache.find(r => r.name === `player-${i+1}`);
-                    member.roles.add(role);
-                }
+            await DB.update('isGameStarted', 'true');
+                
+            await DB.update('playersID', playersID);
+
+            for(let i =0; i< playersID.length;i++){
+                let member = await msg.mentions.members.get(playersID[i]);
+                let role = await msg.guild.roles.cache.find(role => role.name === `player-${i+1}`);
+                member.roles.add(role);
             }
-        });
+            for(let i = 1; i <= 4 ;i++){
+                let channel = await client.channels.cache.get(channelsId[i-1]);
+                
+                sendCards(client, comCards[i-1], channelsId[i-1], 'Bài của bạn: ');
+               
+                channel.send('- Dùng lệnh sapxep [thứ tự mới của bộ bài] để sắp xếp bài \n Ví du: Ban đầu thứ tự là: 1 2 3 4 5 \n Bạn muốn sắp xếp thành: 3 2 4 1 5 thì nhập: \n sapxep 3 2 4 1 5');
+                channel.send('- Dùng lệnh danhbai [các lá bài muốn đánh] để đánh bài \n Ví du: Bạn có các lá: 1 2 3 4 5 \n Bạn muốn đánh: 3 2 thì nhập: \n danhbai 3 2');
+                
+                await DB.update(`card_${i}`, comCards[i-1]);
+            }
+
+            msg.channel.send('Trò chơi bắt đầu!');
+        }
     }
 };
