@@ -27,6 +27,7 @@ module.exports={
         }
         else{
             msg.channel.send("Vui lòng chờ một chút!");
+            
             [...playersID] = msg.mentions.users.keys();
 
             await DB.update('isGameStarted', 'true');

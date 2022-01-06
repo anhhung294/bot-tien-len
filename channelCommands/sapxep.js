@@ -7,14 +7,14 @@ function hasDuplicates(array) {
 
 module.exports = {
     name: 'sapxep',
-    execute: async function(client, msg, hostChannel){
+    execute: async function(client, msg, hostChannel, channelsId){
         let channelSend = msg.channel;
         let index = msg.channel.name.split(/-/)[1];
         let cards = await DB.get(`card_${index}`);
         let box = msg.content.split(/ +/);
         let result =[];
          
-        hostChannel.send(`${msg.author.tag} đang sắp xếp bài!`);
+        hostChannel.send(`${msg.author.username} đang sắp xếp bài!`);
 
         box.shift();
 

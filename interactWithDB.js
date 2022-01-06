@@ -26,7 +26,7 @@ const getData = async function(name){
         name: name
     };
     let data = await boardComponent.findOne(filter);
-    return data;
+    return data.data;
 };
 
 const updateData = async function(nameOfData, update){
@@ -40,5 +40,5 @@ const updateData = async function(nameOfData, update){
 };
 
 module.exports.save = saveData;
-module.exports.get= getData;
+module.exports.get = getData;
 module.exports.update = updateData;

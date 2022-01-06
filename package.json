@@ -19,7 +19,6 @@
   "dependencies": {
     "discord.js": "^13.5.0",
     "dotenv": "^10.0.0",
-    "mongoose": "^6.1.5",
-    "sql": "^0.78.0"
+    "mongoose": "^6.1.5"
   }
 }

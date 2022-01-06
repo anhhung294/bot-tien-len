@@ -30,7 +30,5 @@ module.exports = function(client,cards ,channelId, title){
         });
     }
     
-    channel.send({ embeds: [exampleEmbed] }); 
-
-    return;
+    return channel.send({ embeds: [exampleEmbed] }); 
 };
