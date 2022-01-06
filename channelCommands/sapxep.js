@@ -19,8 +19,7 @@ module.exports = {
         box.shift();
 
         if(box.length!==cards.length||hasDuplicates(box)){
-            channelSend.send("Bạn đã không sắp xếp đúng cách!");
-            return;
+            return channelSend.send("Bạn đã không sắp xếp đúng cách!");
         } 
             
         for(let i = 0; i < cards.length; i++){
@@ -29,8 +28,6 @@ module.exports = {
 
         await DB.update(`card_${index}`, result);
 
-        sendCards(client, result, msg.channelId, 'Bài của bạn: ');
-        
-        return;
+        return sendCards(client, result, msg.channelId, 'Bài của bạn: '); 
     }
 };

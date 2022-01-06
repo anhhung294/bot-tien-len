@@ -25,8 +25,6 @@ module.exports={
 
         await DB.update(`card_${index}`, result);
 
-        sendCards(client, result, hostChannel.id, `${msg.author.name} đánh: `);
-
-        return;
+        return sendCards(client, result, hostChannel.id, `${msg.author.name} đánh: `); 
     }
 };

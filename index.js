@@ -28,11 +28,17 @@ for(let file of files2){
 client.on('messageCreate', msg =>{
     let command = msg.content.slice(PREFIX.length).split(/ +/).shift();
     let channelSendID = msg.channelId;
-    if(msg.author.bot || !msg.content.startsWith(PREFIX))return;
-    if(!channelsId.includes(channelSendID)) return;
+
+    if(msg.author.bot || !msg.content.startsWith(PREFIX)) return;
+    else if(!channelsId.includes(channelSendID)) return;
+
     channelsId.shift();
-    if(hostID===channelSendID&&hostCommands.has(command)) hostCommands.get(command).execute(client, msg, channelsId);
-    else if(channelsId.includes(channelSendID)&&channelCommands.has(command)) channelCommands.get(command).execute(client, msg, client.channels.cache.get(hostID));
+
+    if(hostID===channelSendID&&hostCommands.has(command)){
+        hostCommands.get(command).execute(client, msg, channelsId);
+    }else if(channelsId.includes(channelSendID)&&channelCommands.has(command)){
+        channelCommands.get(command).execute(client, msg, client.channels.cache.get(hostID));
+    }
 });
 
 
