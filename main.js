@@ -10,18 +10,27 @@ const hostID = env.HOST_ID;
 
 const channelsId = [hostID,env.firstChannelId, env.secondChannelId, env.thirdChannelId, env.fourthChannelId];
 
-const files = fs.readdirSync('./hostCommands').filter(file => file.endsWith('.js'));
+const files1 = fs.readdirSync('./hostCommands').filter(file => file.endsWith('.js'));
 const hostCommands = new Map();
-for(let file of files){
+for(let file of files1){
     let command = require(`./hostCommands/${file}`);
     hostCommands.set(command.name, command);
+}
+
+const files2 = fs.readdirSync('./channelCommands').filter(file => file.endsWith('.js'));
+const channelCommands = new Map();
+for(let file of files2){
+    let command = require(`./channelCommands/${file}`);
+    channelCommands.set(command.name, command);
 }
 
 client.on('messageCreate', msg =>{
     let command = msg.content.split(' ').shift();
     let channelSendID = msg.channelId;
     if(msg.author.bot || !channelsId.includes(channelSendID)) return;
+    channelsId.shift();
     if(hostID===channelSendID&&hostCommands.has(command)) return hostCommands.get(command).execute(client, msg, channelsId);
+    else if(channelsId.includes(channelSendID)&&channelCommands.has(command)) return channelCommands.get(command).execute(client, msg, channelsId);
 });
 
 
