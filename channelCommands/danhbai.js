@@ -11,12 +11,12 @@ function hasDuplicates(array) {
 module.exports={
     name: 'danhbai',
     execute: async function(client, msg, hostChannel, channelsId){
-        let channelSend = msg.channel;
-        let index = msg.channel.name.split(/-/)[1];
-        let cards = await DB.get(`card_${index}`);
-        let box = msg.content.split(/ +/);
-        let result =[];
-        let playersID = DB.get('playersID');
+        var channelSend = msg.channel;
+        var index = msg.channel.name.split(/-/)[1];
+        var cards = await DB.get(`card_${index}`);
+        var box = msg.content.split(/ +/);
+        var playersID =await DB.get('playersID');
+        var result =[];
         
         box.shift();
 
@@ -31,14 +31,14 @@ module.exports={
         cards = cards.filter(card => !result.includes(card));
 
         if(cards.length===0){
-            let rank = await DB.get('rank')[0];
-            
-            if(parseInt(rank)===playersID.length){
-                DB.update('rank', '1');
+            let rank = await DB.getRank();
+
+            if(rank===playersID.length){
+                DB.updateRank(1);
                 hostChannel.send(`${msg.author.username} về chót`);
                 return endGame.execute(client, msg, channelsId);
             }else{
-                DB.update('rank', (parseInt(rank)+1).toString());
+                DB.updateRank(rank+1);
             }
             
             sendCards(client, result, hostChannel.id, `${msg.author.username} đánh: `);

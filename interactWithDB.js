@@ -8,7 +8,8 @@ mongoose.connect(urlDB).then(()=> console.log('Connected to database!')).catch(e
 
 const boardComponentsSchema = new mongoose.Schema({
     name: String,
-    data: [String]
+    data: [String],
+    number: Number
 });    
 
 const boardComponent = new mongoose.model('board_datas', boardComponentsSchema);
@@ -39,6 +40,26 @@ const updateData = async function(nameOfData, update){
     return boardComponent.findOneAndUpdate(filter, updateData);
 };
 
+const getRank = async function(){
+    let filter = {
+        name: 'rank'
+    };
+    let data = await boardComponent.findOne(filter);
+    return data.number;
+};
+
+const updateRank = async function(update){
+    let filter = {
+        name: 'rank'
+    };
+    let updateData = {
+        number : update
+    };
+    return boardComponent.findOneAndUpdate(filter, updateData);
+};
+
+module.exports.updateRank = updateRank;
+module.exports.getRank = getRank;
 module.exports.save = saveData;
 module.exports.get = getData;
 module.exports.update = updateData;
