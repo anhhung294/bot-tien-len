@@ -1,0 +1,19 @@
+Các người chơi sẽ vào room voice để có thể tương tác với nhau (tùy chọn).
+
+Luật chơi sẽ là luật tiến lên miền nam thông dụng.
+
+Lượt chơi là theo thứ tự tag nên các bạn hãy để ý điều này, ngoài ra mỗi người chơi sẽ được cấp 1 room chat text riêng để tương tác với bot, có thể biết số thứ tự của mình theo tên room (player-1, player-2,...).
+
+-Dùng lệnh start [@username...] với @username... là tag của các người chơi để bắt đầu ván mới
+
+-Dùng lệnh end để kết thúc 1 ván
+
+- Dùng lệnh sapxep [thứ tự mới của bộ bài] để sắp xếp bài 
+    Ví du: Ban đầu thứ tự là: 1 2 3 4 5 
+    Bạn muốn sắp xếp thành: 3 2 4 1 5 thì nhập: 
+    sapxep 3 2 4 1 5
+
+- Dùng lệnh danhbai [thứ tự các lá bài muốn đánh] để đánh bài 
+    Ví du: Bạn có các lá: 1 2 3 4 5 
+    Bạn muốn đánh: 3 2 thì nhập: 
+    danhbai 3 2
