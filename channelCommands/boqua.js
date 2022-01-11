@@ -4,13 +4,15 @@ module.exports = {
     execute: async function(client, msg, hostChannel, channelsId){
         const index = msg.channel.name.split('-')[1];
         const playersID =await DB.get('playersID');
-        const player = client.users.cache.get(playersID[(index%4)]);
-        const turn = await DB.get('turn')[0];
+        const nextPlayer = client.users.cache.get(playersID[(index%playersID.length)]);
+        const turn = await DB.get('turn');
         
-        if(turn !== msg.author.tag){
+        if(turn[0] !== msg.author.tag){
             return channelSend.send("Chưa tới lượt của bạn!");
         }
 
-        hostChannel.send(`${msg.author.username} bỏ lượt! Tới lượt người chơi ${player}`);
+        await DB.update('turn', [`${nextPlayer.tag.toString()}`])
+
+        hostChannel.send(`${msg.author.username} bỏ lượt! Tới lượt người chơi ${nextPlayer}`);
     }
 };

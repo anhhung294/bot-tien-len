@@ -58,13 +58,16 @@ module.exports={
                 let tempCards = await DB.get(`card_${i+1}`);
                 if(tempCards.includes('3-spades')){
                     await DB.update('turn', client.users.cache.get(playersID[i]).tag);
+
+                    hostChannel.send(`Người chơi bắt đầu là ${client.users.cache.get(playersID[i])}`);
+
                     break;
                 }
             }
 
-            var checkTurn = await DB.get('turn')[0];
+            var checkTurn = await DB.get('turn');
 
-            if(!checkTurn){
+            if(checkTurn[0]===''){
                 hostChannel.send('Không người chơi nào có 3 bích!');
 
                 let firstPlayer = client.users.cache.get(playersID[Math.floor(Math.random()*playersID.length)]);
@@ -72,7 +75,6 @@ module.exports={
                 await DB.update('turn', [`${firstPlayer.tag}`]);
 
                 hostChannel.send(`Lượt bắt đầu sẽ được chọn ngẫu nhiên \nNgười chơi bắt đầu là ${firstPlayer}`);
-                
             }
 
             return hostChannel.send('Trò chơi bắt đầu!'); 

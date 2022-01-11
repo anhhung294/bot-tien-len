@@ -16,9 +16,9 @@ module.exports={
         const index = msg.channel.name.split(/-/)[1];
         var cards = await DB.get(`card_${index}`);
         var box = msg.content.split(/ +/);
-        const playersID =await DB.get('playersID');
+        var playersID =await DB.get('playersID');
         var result =[];
-        const nextPlayer = client.users.cache.get(playersID[(index%4)]);
+        const nextPlayer = await client.users.cache.get(playersID[(index%playersID.length)]);
         
         if(turn[0] !== msg.author.tag.toString()){
             return channelSend.send("Chưa tới lượt của bạn!");
@@ -53,8 +53,10 @@ module.exports={
 
             if(rank===playersID.length){
                 await DB.updateRank(1);
+
                 hostChannel.send(`${msg.author} về chót`);
-                return endGame.execute(client, msg, channelsId);
+
+                return endGame(client, msg, channelsId);
             }else if(playersID.length-rank===1){
                 sendCards(client, result, hostChannel.id, `${msg.author.username} đánh: `);
                 
@@ -66,6 +68,10 @@ module.exports={
 
                 return endGame(client, msg, channelsId);
             }else{
+                playersID.splice(playersID.indexOf(msg.author.id),1);
+
+                await DB.update('playersID', playersID);
+                
                 await DB.updateRank(rank+1);
             }
             
