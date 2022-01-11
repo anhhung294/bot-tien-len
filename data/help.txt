@@ -20,6 +20,6 @@ Lượt chơi là theo thứ tự tag nên các bạn hãy để ý điều này
 
 - Dùng lệnh danhbai all để đánh tất cả các lá còn lại.    
 
-- Dùng lệnh boqua để đánh bài bỏ qua lượt.
+- Dùng lệnh boqua để bỏ qua lượt.
 
 - Dùng lệnh danhlai để đánh lại.

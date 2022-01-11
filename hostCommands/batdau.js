@@ -48,7 +48,7 @@ module.exports={
                
                 channel.send('- Dùng lệnh sapxep [thứ tự mới của bộ bài] để sắp xếp bài \n Ví du: Ban đầu thứ tự là: 1 2 3 4 5 \n Bạn muốn sắp xếp thành: 3 2 4 1 5 thì nhập: \n sapxep 3 2 4 1 5');
                 channel.send('- Dùng lệnh danhbai [các lá bài muốn đánh] để đánh bài \n Ví du: Bạn có các lá: 1 2 3 4 5 \n Bạn muốn đánh: 3 2 thì nhập: \n danhbai 3 2');
-                channel.send('- Dùng lệnh boqua để đánh bài bỏ qua lượt.');
+                channel.send('- Dùng lệnh boqua để bỏ qua lượt.');
                 channel.send('- Dùng lệnh danhbai all để đánh tất cả các lá còn lại.');
                 
                 await DB.update(`card_${i}`, comCards[i-1]);
