@@ -8,7 +8,7 @@ const shuffledCards = function(cards){
     for(let i=0; i< Math.floor(Math.random()*50);i++){
         cards.sort((a,b)=> 0.5- Math.random());
     }  
-    return [cards.slice(0,13), cards.slice(13,26),cards.slice(26,39), cards.slice(39)];
+    return [cards.slice(0,13).sort((a,b)=> a.split('-')[0]-b.split('-')[0]), cards.slice(13,26).sort((a,b)=> a.split('-')[0]-b.split('-')[0]),cards.slice(26,39).sort((a,b)=> a.split('-')[0]-b.split('-')[0]), cards.slice(39).sort((a,b)=> a.split('-')[0]-b.split('-')[0])];
 };
 
 module.exports={
