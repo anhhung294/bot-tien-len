@@ -2,16 +2,18 @@
 const DB = require('../interactWithDB.js');
 require('dotenv').config();
 const GUILD_ID = process.env.GUILD_ID;
+const hostID = process.env.HOST_ID;
 
 module.exports ={
-    name: 'end',
+    name: 'ketthuc',
     execute: async function(client, msg, channelsId){
         let isGameStarted = await DB.get('isGameStarted');
         const guild = client.guilds.cache.get(GUILD_ID);
         const playersID = await DB.get('playersID');
+        const hostChannel = client.channels.cache.get(hostID);
 
         if(isGameStarted[0]==="false"){
-            return msg.channel.send('Chưa bắt đầu trò chơi!');
+            return hostChannel.send('Chưa bắt đầu trò chơi!');
         }else{
             msg.reply('Vui lòng chờ 30s trước khi bắt đầu ván mới!');
         
@@ -35,7 +37,9 @@ module.exports ={
                 member.roles.remove(role.id);
             }
             
-            msg.channel.send("Có thể bắt đầu ván mới ngay lúc này!");
+            await DB.update('turn', '');
+            
+            hostChannel.send("Có thể bắt đầu ván mới ngay lúc này!");
         }
     }
 };

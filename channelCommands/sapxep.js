@@ -26,6 +26,8 @@ module.exports = {
             result.push(cards[box[i]-1]);
         }
 
+        await DB.update(`pre_card_${index}`, cards);
+
         await DB.update(`card_${index}`, result);
 
         return sendCards(client, result, msg.channelId, 'Bài của bạn: '); 

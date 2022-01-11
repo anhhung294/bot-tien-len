@@ -35,10 +35,10 @@ for(let file of files2){
 }
 
 client.on('messageCreate', msg =>{
-    let command = msg.content.split(/ +/).shift();
-    let channelSendID = msg.channelId;
+    let command = msg.content.trim().toLowerCase().split(/ +/).shift();
+    let channelSendID = msg.channel.id;
     
-    if(msg.author.bot ||!hostID=== channelSendID) return;
+    if(msg.author.bot || hostID!== channelSendID) return;
     
     if(hostCommands.has(command)){
         hostCommands.get(command).execute(client, msg, channelsId);
@@ -47,7 +47,7 @@ client.on('messageCreate', msg =>{
 });
 
 client.on('messageCreate', message =>{
-    let command = message.content.split(/ +/).shift();
+    let command = message.content.trim().toLowerCase().split(/ +/).shift();
     let channelSendID = message.channelId;
     
     if(message.author.bot ||!channelsId.includes(channelSendID)) return;

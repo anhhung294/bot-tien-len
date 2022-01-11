@@ -12,14 +12,14 @@ const shuffledCards = function(cards){
 };
 
 module.exports={
-    name : 'start',
+    name : 'batdau',
     execute : async function(client, msg, channelsId){
         var playersID = [];
         const hostChannel = msg.channel;
         const comCards = shuffledCards(cards);
 
         if(await DB.get('isGameStarted')[0]==='true'){
-            return msg.channel.send('Vui lòng kết thúc ván trước');
+            return hostChannel.send('Vui lòng kết thúc ván trước');
         }
         
         if(msg.mentions.users.size > 4||msg.mentions.users.size <=1){
@@ -34,6 +34,8 @@ module.exports={
                 
             await DB.update('playersID', playersID);
 
+            await DB.updateRank(1);
+
             for(let i =0; i< playersID.length;i++){
                 let member = await msg.mentions.members.get(playersID[i]);
                 let role = await msg.guild.roles.cache.find(role => role.name === `player-${i+1}`);
@@ -46,11 +48,34 @@ module.exports={
                
                 channel.send('- Dùng lệnh sapxep [thứ tự mới của bộ bài] để sắp xếp bài \n Ví du: Ban đầu thứ tự là: 1 2 3 4 5 \n Bạn muốn sắp xếp thành: 3 2 4 1 5 thì nhập: \n sapxep 3 2 4 1 5');
                 channel.send('- Dùng lệnh danhbai [các lá bài muốn đánh] để đánh bài \n Ví du: Bạn có các lá: 1 2 3 4 5 \n Bạn muốn đánh: 3 2 thì nhập: \n danhbai 3 2');
+                channel.send('- Dùng lệnh boqua để đánh bài bỏ qua lượt.');
+                channel.send('- Dùng lệnh danhbai all để đánh tất cả các lá còn lại.');
                 
                 await DB.update(`card_${i}`, comCards[i-1]);
             }
 
-            return msg.channel.send('Trò chơi bắt đầu!'); 
+            for(let i = 0; i < playersID.length; i++){
+                let tempCards = await DB.get(`card_${i+1}`);
+                if(tempCards.includes('3-spades')){
+                    await DB.update('turn', client.users.cache.get(playersID[i]).tag);
+                    break;
+                }
+            }
+
+            var checkTurn = await DB.get('turn')[0];
+
+            if(!checkTurn){
+                hostChannel.send('Không người chơi nào có 3 bích!');
+
+                let firstPlayer = client.users.cache.get(playersID[Math.floor(Math.random()*playersID.length)]);
+
+                await DB.update('turn', [`${firstPlayer.tag}`]);
+
+                hostChannel.send(`Lượt bắt đầu sẽ được chọn ngẫu nhiên \nNgười chơi bắt đầu là ${firstPlayer}`);
+                
+            }
+
+            return hostChannel.send('Trò chơi bắt đầu!'); 
         }
     }
 };
